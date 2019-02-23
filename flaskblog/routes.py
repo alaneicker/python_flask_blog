@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from flaskblog import app
 from flaskblog.forms import RegistrationForm, LoginForm
 from flaskblog.models import User, Post
+from flaskblog.form_utils import set_input_class
 
 posts = [
   {
@@ -60,4 +61,4 @@ def login():
     else:
         flash('Login Unsuccessful. Please check username and password', 'danger')
 
-  return render_template('login.html', form=form, title='Login')
+  return render_template('login.html', form=form, title='Login', set_input_class=set_input_class)
