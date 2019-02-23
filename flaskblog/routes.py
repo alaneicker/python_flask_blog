@@ -45,7 +45,7 @@ def register():
     flash(f'Account created for {form.username.data}!', 'success')
     return redirect(url_for('home'))
 
-  return render_template('register.html', form=form, title='Register')
+  return render_template('register.html', form=form, title='Register', set_input_class=set_input_class)
 
 # Login route
 # -----------------------
