@@ -3,7 +3,7 @@ from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm
 from flaskblog.models import User, Post
 from flaskblog.form_utils import set_input_class
-from flask_login import login_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 posts = [
   {
@@ -47,6 +47,8 @@ def about():
 
 @app.route("/register", methods=['GET','POST'])
 def register():
+  if current_user.is_authenticated:
+    return redirect(url_for('home'))
   form = RegistrationForm()
   if form.validate_on_submit():
     hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -72,6 +74,9 @@ def register():
 
 @app.route("/login", methods=['GET','POST'])
 def login():
+  if current_user.is_authenticated:
+    return redirect(url_for('home'))
+  
   form = LoginForm()
 
   if form.validate_on_submit():
@@ -87,4 +92,21 @@ def login():
     form=form, 
     title='Login', 
     set_input_class=set_input_class
+  )
+
+  # Logout route
+# -----------------------
+@app.route('/logout')
+def logout():
+  logout_user()
+  return redirect(url_for('login'))
+
+# Account route
+# -----------------------
+@app.route('/account')
+@login_required
+def account():
+  return render_template(
+    'account.html', 
+    title='Account'
   )
